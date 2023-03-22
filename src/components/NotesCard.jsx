@@ -49,7 +49,7 @@ const NotesCard = ({ Note, handleDelete }) => {
         subheader={Note.category}
       />
       <CardContent>
-        <Typography variant="body2" color="textSecondary">
+        <Typography sx={{ overflowWrap: 'break-word' }} variant="body2" color="textSecondary">
           {Note.details}
         </Typography>
       </CardContent>

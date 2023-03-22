@@ -62,14 +62,14 @@ const Create = () => {
   performOnAuth(() => { userEmail = auth.currentUser.email }, () => { userEmail = '' })
 
 
-  const colRef = collection(db, `users/${userEmail}/notes`)
-
 
 
 
 
 
   const handleSubmit = (e) => {
+    const colRef = collection(db, `users/${userEmail}/notes`)
+
     e.preventDefault();
     title == "" ? setTitleError(true) : setTitleError(false);
     details == "" ? setDetailsError(true) : setDetailsError(false);
@@ -81,6 +81,7 @@ const Create = () => {
         category: category,
         createdAt: serverTimestamp()
       }).then(() => {
+        console.log('my email:', userEmail)
         realForm.current.reset()
       });
 
