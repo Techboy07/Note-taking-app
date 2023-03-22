@@ -63,7 +63,7 @@ const Layout = () => {
 
 
 
-    const [path, setPath] = useState('/Notes')
+    const [path, setPath] = useState('/Create')
 
 
     // firebase
@@ -92,7 +92,7 @@ const Layout = () => {
     //  event handlers
 
 
-    console.log(currentUser)
+    // console.log(currentUser.uid)
 
 
     const [, mm, dd, yy] = Date().split(" ");

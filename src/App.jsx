@@ -8,8 +8,15 @@ import { firebase } from "../firbaseConfig";
 import { useNavigate } from "react-router-dom";
 
 
+import { getDocs, collection, getFirestore, query } from "firebase/firestore";
+
+
 
 const App = () => {
+
+
+
+
 
   const { logOut, performOnAuth } = firebase()
   let auth = useContext(AuthContext)
