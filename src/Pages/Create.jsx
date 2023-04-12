@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Typography,
   Button,
-  ButtonGroup,
+
   TextField,
   RadioGroup,
   Radio,
@@ -21,7 +21,7 @@ import { getFirestore, collection, addDoc, serverTimestamp, orderBy, query, wher
 import { firebase } from "../../firbaseConfig";
 
 
-const { app } = firebase()
+const { auth, performOnAuth } = firebase()
 
 
 
@@ -57,12 +57,18 @@ const Create = () => {
   const [category, setCategory] = useState("todos");
 
   const db = getFirestore()
-  const colRef = collection(db, "notes")
+
+  let userEmail;
+  performOnAuth(() => { userEmail = auth.currentUser.email }, () => { userEmail = '' })
+
+
+
 
 
 
 
   const handleSubmit = (e) => {
+    const colRef = collection(db, `users/${userEmail}/notes`)
 
     e.preventDefault();
     title == "" ? setTitleError(true) : setTitleError(false);
@@ -75,6 +81,7 @@ const Create = () => {
         category: category,
         createdAt: serverTimestamp()
       }).then(() => {
+        console.log('my email:', userEmail)
         realForm.current.reset()
       });
 

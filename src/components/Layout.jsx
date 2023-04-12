@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {
     Typography,
-    Drawer,
+    SwipeableDrawer,
     List,
     ListItem,
     ListItemText,
@@ -12,6 +12,7 @@ import {
     Avatar,
 } from "@mui/material";
 import { AddCircleOutlineOutlined, SubjectOutlined } from "@mui/icons-material";
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import Notes from "../Pages/Notes";
 import Create from "../Pages/Create";
@@ -41,34 +42,20 @@ const classes = (theme) => {
         title: {
             padding: theme.spacing(2),
         },
-        appbar: { width: `calc(100% - ${drawerWidth}px)` },
+
         toolbar: theme.mixins.toolbar,
     };
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
 const Layout = () => {
     // react hooks
 
-
-
-    const [path, setPath] = useState('/Notes')
-
+    const [path, setPath] = useState("/Create");
+    const [drawerState, setDrawerState] = useState(false);
 
     // firebase
 
-    const { logOut, currentUser } = firebase()
+    const { logOut, currentUser } = firebase();
 
     // assets for mapimg
 
@@ -83,80 +70,87 @@ const Layout = () => {
             icon: <AddCircleOutlineOutlined color="secondary" />,
             path: "/Create",
         },
-
-
-
     ];
 
-
+    const appbar = {
+        width: "100%",
+    };
     //  event handlers
 
-
-    console.log(currentUser)
-
+    // console.log(currentUser.uid)
 
     const [, mm, dd, yy] = Date().split(" ");
-    const { page, drawer, root, title, appbar, toolbar } = classes();
+    const { page, drawer, root, title, toolbar } = classes();
 
+    function toggleDrawer(anchor, isDrawerOpen) {
+        setDrawerState(isDrawerOpen);
+    }
 
     return (
+        <div style={root}>
+            {/* app bar */}
+            <AppBar position="fixed" sx={appbar} elevation={0} color={"secondary"}>
+                <Toolbar>
+                    <MenuOutlinedIcon
+                        onClick={() => setDrawerState(true)}
+                        sx={{ marginRight: "20px" }}
+                    />
+                    <Typography
+                        // variant="h6"
+                        sx={{
+                            flexGrow: 1,
+                        }}
+                    >
+                        {`Today is ${dd} of ${mm} ${yy}`}
+                    </Typography>
 
-        (
-            <div style={root}>
-                {/* app bar */}
-                <AppBar position="fixed" sx={appbar} elevation={0} color={"secondary"}>
-                    <Toolbar>
-                        <Typography
-                            variant="h6"
-                            sx={{
-                                flexGrow: 1,
-                            }}
-                        >
-                            {`Today is ${dd} of ${mm} ${yy}`}
-                        </Typography>
+                    <Typography>blacky</Typography>
+                    <Avatar src="/vite.svg" sx={{ padding: "20px" }} />
+                </Toolbar>
+            </AppBar>
+            {/* side drawer */}
+            <SwipeableDrawer
+                open={drawerState}
+                sx={drawer}
+                anchor="left"
+                onClose={() => toggleDrawer("left", false)}
+                onOpen={() => toggleDrawer("left", true)}
+            >
+                <div>
+                    <Typography variant="h5" sx={title}>
+                        Blacksheep's Notes
+                    </Typography>
+                </div>
 
-                        <Typography variant="h6">blacky</Typography>
-                        <Avatar src="/vite.svg" sx={{ padding: "20px" }} />
-                    </Toolbar>
-                </AppBar>
-                {/* side drawer */}
-                <Drawer sx={drawer} variant="permanent" anchor="left">
-                    <div>
-                        <Typography variant="h5" sx={title}>
-                            Blacksheep's Notes
-                        </Typography>
-                    </div>
-
-                    {/* list / links */}
-                    <List>
-                        {menuItems.map((item) => (
-                            <ListItem
-                                button
-                                key={item.text}
-                                onClick={() => setPath(item.path)}
-                            >
-                                <ListItemIcon>{item.icon}</ListItemIcon>
-                                <ListItemText primary={item.text} />
-                            </ListItem>
-                        ))}
-
-                        <ListItem
-                            button
-
-                            onClick={() => logOut()}
-                        >
-                            <ListItemIcon><HomeOutlinedIcon color="secondary" /></ListItemIcon>
-                            <ListItemText primary={"Logout"} />
+                {/* list / links */}
+                <List>
+                    {menuItems.map((item) => (
+                        <ListItem button key={item.text} onClick={() => setPath(item.path)}>
+                            <ListItemIcon>{item.icon}</ListItemIcon>
+                            <ListItemText primary={item.text} />
                         </ListItem>
+                    ))}
 
-                    </List>
-                </Drawer>
-                <div style={page}>
-                    <Toolbar />
-                    <div>{path == '/Notes' ? <Notes /> : <Create />}</div>
+                    <ListItem button onClick={() => logOut()}>
+                        <ListItemIcon>
+                            <HomeOutlinedIcon color="secondary" />
+                        </ListItemIcon>
+                        <ListItemText primary={"Logout"} />
+                    </ListItem>
+                </List>
+            </SwipeableDrawer>
+            <div style={page}>
+                <Toolbar />
+                <div
+                    style={{
+                        paddingTop: "40px",
+                        maxWidth: '100%'
+                    }}
+                >
+                    {path == "/Notes" ? <Notes /> : <Create />}
                 </div>
             </div>
-        )
+        </div>
     );
 };
 

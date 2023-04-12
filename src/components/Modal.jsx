@@ -2,11 +2,12 @@ import React, { useState, useContext } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import TextField from "@mui/material/TextField";
+import { TextField, InputAdornment, IconButton } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Index";
+
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import { firebase } from "../../firbaseConfig";
 
@@ -33,7 +34,7 @@ export default function BasicModal({ opened, handleClose, log }) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [showPassword, setShowPassword] = useState(false)
 
   const { createUser, signIn } = firebase();
 
@@ -104,8 +105,22 @@ export default function BasicModal({ opened, handleClose, log }) {
                       width: "100%",
                     }}
                     required
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     label="Password"
+
+
+                    // endAdornment={
+                    //   <InputAdornment position="end">
+                    //     <IconButton
+                    //       aria-label="toggle password visibility"
+                    //       onClick={() => setShowPassword(!showPassword)}
+                    //       onMouseDown={() => setShowPassword(!showPassword)}
+                    //       edge="end"
+                    //     >
+                    //       {showPassword ? <VisibilityOff /> : <Visibility />}
+                    //     </IconButton>
+                    //   </InputAdornment>
+                    // }
                     color="secondary"
                     value={password}
                     onChange={(e) => {
